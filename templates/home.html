@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<section>
+  <div class="d-flex flex-wrap px-5 pt-3 align-items-center">
+    <div class="col-6">
+      <h1 class="text-center text-danger">Welcome to Django Blog</h1>
+      <p>{% lorem 3 b random %}</p>
+    </div>
+    <div class="col-6">
+      <img src="{% static 'blog.avif' %}" />
+    </div>
+  </div>
+</section>
+
+<section class="pt-3">
+  <br>
+  <br>
+  <br>
+  <hr>
+  <div class="d-flex flex-wrap">
+    <div class="col-2 bg-success p-3">
+      {% for c in cat %}
+      <div class="p-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="category"
+            id="{{c.id}}"
+            value="option1"
+            unchecked
+          />
+          <label class="form-check-label" for="{{c.id}}">
+            <a
+              href="{% url 'category_wise_post' c.slug %}"
+              class="text-decoration-none text-white"
+              >{{c.name}}</a
+            >
+          </label>
+        </div>
+      </div>
+  
+      {% endfor %}
+    </div>
+  
+    <div class="col-10 flex-wrap">
+      <h1 class="text-center text-danger pt-3">Blog Project</h1>
+      <h4 class="text-center text-success pt-3">{{data | length}} post found</h4>
+      <div class="d-flex flex-wrap p-3">
+        {% for post in data %}
+        <div class="col-sm-3 mb-3 mb-sm-0 pt-5">
+          <div class="card mx-2">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{% url 'detailsPost' post.id %}">{{post.title}}</a></h5>
+              <p class="card-text">{{post.content | truncatewords:10}}</p>
+              <p>Author:{{post.author.first_name}} {{post.author.last_name}}</p>
+              <p>
+                Category: {%for cat in post.category.all %}
+                <button class="btn btn-primary m-2" disabled>{{cat.name}}</button>
+                {%endfor%}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
